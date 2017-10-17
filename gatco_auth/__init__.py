@@ -4,6 +4,7 @@ import base64
 import hashlib
 import hmac
 import sys
+import uuid
 
 from passlib.context import CryptContext
 from collections import namedtuple
@@ -136,6 +137,8 @@ class Auth:
     def serialize(self, user):
         """Serialize the user, returns a token to be placed into session"""
         user_id = getattr(user, self.id_attribute)
+        if type(user_id) is uuid.UUID:
+            user_id = str(user_id)
         return {'uid': user_id, 'exprire': time.time() + self.expire}
 
     def serializer(self, user_serializer):
