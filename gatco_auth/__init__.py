@@ -182,7 +182,9 @@ class Auth:
         :param password: The password to sign
         """
         if salt is None:
-            salt = self.password_salt
+            salt = self.password_salt + salt
+        else:
+        	salt = self.password_salt
 
         if salt is None:
             raise RuntimeError(
