@@ -176,12 +176,13 @@ class Auth:
             string = string.encode('utf-8')
         return string
 
-    def get_hmac(self, password):
+    def get_hmac(self, password, salt):
         """Returns a Base64 encoded HMAC+SHA512 of the password signed with the salt specified
         by ``SECURITY_PASSWORD_SALT``.
         :param password: The password to sign
         """
-        salt = self.password_salt
+        if salt is None:
+            salt = self.password_salt
 
         if salt is None:
             raise RuntimeError(
@@ -195,7 +196,7 @@ class Auth:
     def md5(self, data):
         return hashlib.md5(self.encode_string(data)).hexdigest()
 
-    def encrypt_password(self, password):
+    def encrypt_password(self, password, salt=None):
         """Encrypts the specified plaintext password using the configured encryption options.
         :param password: The plaintext password to encrypt
         """
@@ -203,16 +204,16 @@ class Auth:
             raise RuntimeError('The password context must not be None')
         if self.password_hash == 'plaintext':
             return password
-        signed = self.get_hmac(password).decode('ascii')
+        signed = self.get_hmac(password, salt).decode('ascii')
         return self.pwd_context.encrypt(signed)
 
-    def verify_password(self, password, password_hash):
+    def verify_password(self, password, password_hash, salt=None):
         """Returns ``True`` if the password matches the supplied hash.
         :param password: A plaintext password to verify
         :param password_hash: The expected hash value of the password (usually from your database)
         """
         if self.password_hash != 'plaintext':
-            password = self.get_hmac(password)
+            password = self.get_hmac(password, salt)
 
         return self.pwd_context.verify(password, password_hash)
 
