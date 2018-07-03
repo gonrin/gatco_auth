@@ -181,18 +181,19 @@ class Auth:
         by ``SECURITY_PASSWORD_SALT``.
         :param password: The password to sign
         """
+        use_salt = None 
         if salt is not None:
-            salt = self.password_salt + salt
+            use_salt = self.password_salt + salt
         else:
-        	salt = self.password_salt
+        	use_salt = self.password_salt
 
-        if salt is None:
+        if use_salt is None:
             raise RuntimeError(
                 'The configuration value `SECURITY_PASSWORD_SALT` must '
                 'not be None when the value of `SECURITY_PASSWORD_HASH` is '
                 'set to "%s"' % self.password_hash)
 
-        h = hmac.new(self.encode_string(salt), self.encode_string(password), hashlib.sha512)
+        h = hmac.new(self.encode_string(use_salt), self.encode_string(password), hashlib.sha512)
         return base64.b64encode(h.digest())
 
     def md5(self, data):
