@@ -61,7 +61,7 @@ class Auth:
         self.redirect_unauthenticated = get('AUTH_REDIRECT_UNAUTHENTICATED', False)
 
         self.password_hash = get('AUTH_PASSWORD_HASH', "plaintext")
-        self.password_salt = get('AUTH_PASSWORD_SALT', None)
+        self.password_salt = get('AUTH_PASSWORD_SALT', "")
 
         self.pwd_context = self.get_pwd_context()
 
@@ -187,7 +187,7 @@ class Auth:
         else:
         	use_salt = self.password_salt
 
-        if use_salt is None:
+        if (use_salt is None) or (len(use_salt) == 0):
             raise RuntimeError(
                 'The configuration value `SECURITY_PASSWORD_SALT` must '
                 'not be None when the value of `SECURITY_PASSWORD_HASH` is '
