@@ -181,7 +181,7 @@ class Auth:
         by ``SECURITY_PASSWORD_SALT``.
         :param password: The password to sign
         """
-        if salt is None:
+        if salt is not None:
             salt = self.password_salt + salt
         else:
         	salt = self.password_salt
