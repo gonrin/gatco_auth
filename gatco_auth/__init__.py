@@ -46,7 +46,7 @@ class Auth:
         if app is not None:
             self.init_app(app)
 
-    def init_app(self, app):
+    def init_app(self, app, options=None):
         """Setup with application's configuration.
         This method be called automatically if the application is provided
         upon initialization
@@ -67,10 +67,15 @@ class Auth:
 
         self.expire = get('AUTH_EXPIRE_TIME', 86400)
 
-        session = get('AUTH_SESSION_NAME', get('SESSION_NAME', 'session'))
-
-        self.session_name = session
+        # session = get('AUTH_SESSION_NAME', get('SESSION_NAME', 'session'))
+        self.session_name = get('AUTH_SESSION_NAME', get('SESSION_NAME', 'session'))
         self.auth_session_key = get('AUTH_TOKEN_NAME', '_auth')
+
+        if (options is not None) and (options.get('AUTH_SESSION_NAME') is not None):
+            self.session_name = options.get('AUTH_SESSION_NAME')
+        if (options is not None) and (options.get('AUTH_TOKEN_NAME') is not None):
+            self.auth_session_key = options.get('AUTH_TOKEN_NAME')
+        
 
 
     def login_user(self, request, user):
