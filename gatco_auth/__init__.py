@@ -70,9 +70,6 @@ class Auth:
         # session = get('AUTH_SESSION_NAME', get('SESSION_NAME', 'session'))
         self.session_name = get('AUTH_SESSION_NAME', get('SESSION_NAME', 'session'))
         self.auth_session_key = get('AUTH_TOKEN_NAME', '_auth')
-
-        if (options is not None) and (options.get('AUTH_SESSION_NAME') is not None):
-            self.session_name = options.get('AUTH_SESSION_NAME')
         if (options is not None) and (options.get('AUTH_TOKEN_NAME') is not None):
             self.auth_session_key = options.get('AUTH_TOKEN_NAME')
         
